@@ -1,5 +1,5 @@
 export const API_URL = window.location.origin;
-const WORKER_URL = 'https://твой-воркер.workers.dev';
+const WORKER_URL = 'steep-sea-e479.hdigdi89.workers.dev';
 
 export const saveToken = (t) => localStorage.setItem('auth_token', t);
 export const getToken = () => localStorage.getItem('auth_token');
