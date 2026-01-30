@@ -2,13 +2,16 @@ import { round, score } from './score.js';
 import { API_URL } from './api.js';
 
 /**
- * Path to directory containing `_list.json` and all levels
+ * Путь к директории с JSON файлами.
+ * Теперь указывает на корень/data (например, ASQ-Lists/data)
  */
-const dir = `${API_URL}/api/data`;
+const dir = `${API_URL}/data`;
 
 export async function fetchList() {
-    const listResult = await fetch(`${dir}/_list.json`);
     try {
+        const listResult = await fetch(`${dir}/_list.json`);
+        if (!listResult.ok) throw new Error("Could not find _list.json");
+        
         const list = await listResult.json();
         return await Promise.all(
             list.map(async (path, rank) => {
@@ -31,8 +34,8 @@ export async function fetchList() {
                 }
             }),
         );
-    } catch {
-        console.error(`Failed to load list.`);
+    } catch (err) {
+        console.error(`Failed to load list. Check if folder "data" exists in root.`);
         return null;
     }
 }
@@ -49,6 +52,11 @@ export async function fetchEditors() {
 
 export async function fetchLeaderboard() {
     const list = await fetchList();
+
+    // Если список не загрузился, возвращаем пустой лидерборд, чтобы кнопки не зависали
+    if (!list) {
+        return [[], ["Failed to load data"]];
+    }
 
     const scoreMap = {};
     const errs = [];
