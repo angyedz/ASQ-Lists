@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASQ List - Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-info {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #0066ff;
+        }
+        .ok { color: green; }
+        .error { color: red; }
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐛 ASQ List Debug Info</h1>
+    
+    <div class="debug-info">
+        <h2>Vue Status</h2>
+        <p id="vue-status">Checking Vue...</p>
+        <p id="router-status">Checking Router...</p>
+    </div>
+
+    <div class="debug-info">
+        <h2>Data Loading</h2>
+        <p id="list-status">Checking list data...</p>
+        <p id="editors-status">Checking editors...</p>
+    </div>
+
+    <div class="debug-info">
+        <h2>Console Logs</h2>
+        <pre id="logs"></pre>
+    </div>
+
+    <script>
+        let logs = [];
+        const originalLog = console.log;
+        const originalError = console.error;
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logs.push('LOG: ' + args.join(' '));
+            updateLogs();
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            logs.push('ERROR: ' + args.join(' '));
+            updateLogs();
+        };
+
+        function updateLogs() {
+            document.getElementById('logs').textContent = logs.slice(-20).join('\n');
+        }
+
+        // Check Vue
+        function checkVue() {
+            const status = document.getElementById('vue-status');
+            if (typeof Vue !== 'undefined') {
+                status.innerHTML = '<span class="ok">✓ Vue loaded</span> (v' + Vue.version + ')';
+            } else {
+                status.innerHTML = '<span class="error">✗ Vue not loaded</span>';
+            }
+        }
+
+        // Check Router
+        function checkRouter() {
+            const status = document.getElementById('router-status');
+            if (typeof VueRouter !== 'undefined') {
+                status.innerHTML = '<span class="ok">✓ Vue Router loaded</span>';
+            } else {
+                status.innerHTML = '<span class="error">✗ Vue Router not loaded</span>';
+            }
+        }
+
+        // Check data
+        async function checkData() {
+            try {
+                const listRes = await fetch('/data/_list.json');
+                const editorsRes = await fetch('/data/_editors.json');
+                
+                if (listRes.ok && editorsRes.ok) {
+                    document.getElementById('list-status').innerHTML = '<span class="ok">✓ List data loaded</span>';
+                    document.getElementById('editors-status').innerHTML = '<span class="ok">✓ Editors data loaded</span>';
+                } else {
+                    document.getElementById('list-status').innerHTML = '<span class="error">✗ Failed to load data</span>';
+                }
+            } catch (e) {
+                document.getElementById('list-status').innerHTML = '<span class="error">✗ ' + e.message + '</span>';
+            }
+        }
+
+        checkVue();
+        checkRouter();
+        checkData();
+
+        // Load main app
+        setTimeout(() => {
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = '/js/main.js';
+            document.head.appendChild(script);
+        }, 500);
+    </script>
+
+    <hr>
+    <h2>Main App</h2>
+    <div id="app"></div>
+</body>
+</html>

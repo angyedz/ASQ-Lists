@@ -1,0 +1,7 @@
+# Для простого бекенда
+flask==3.0.0
+flask-cors==4.0.0
+shield-auth==1.1.0
+passlib==1.7.4
+pyjwt==2.8.0
+

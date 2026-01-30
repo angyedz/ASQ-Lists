@@ -1,0 +1,258 @@
+.page-roulette {
+    background: var(--color-background);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.page-roulette .sidebar {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+    border: 1px solid var(--color-border);
+}
+.page-roulette .sidebar a {
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 500;
+    transition: var(--transition);
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+}
+
+.page-roulette .sidebar a:hover {
+    border-bottom-color: var(--color-primary);
+    color: var(--color-primary-dark);
+}
+
+.page-roulette .sidebar .check {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    cursor: pointer;
+}
+
+.page-roulette .sidebar .check label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.page-roulette .sidebar form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.page-roulette .sidebar .save {
+    border-top: 2px solid var(--color-border);
+    padding-top: 1.5rem;
+    width: 100%;
+}
+
+.page-roulette .sidebar .save p {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    letter-spacing: 0.5px;
+}
+
+.page-roulette .sidebar .save .btns {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.page-roulette .sidebar .save .btns .btn {
+    flex: 1;
+}
+
+.page-roulette .levels-container {
+    grid-row: 1;
+    grid-column: 2 / span 2;
+    overflow-y: auto;
+    padding-right: 0;
+}
+
+.page-roulette .levels {
+    display: flex;
+    flex-direction: column;
+    padding-block: 0;
+    gap: 2rem;
+}
+
+.page-roulette .levels .level {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-auto-rows: max-content;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background-color: var(--color-surface);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: var(--transition);
+    border: 1px solid var(--color-border);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.page-roulette .levels .level:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.15);
+}
+
+.page-roulette .levels .level .video {
+    grid-row: 1 / 3;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.page-roulette .levels .level .video img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.page-roulette .levels .level .meta {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.page-roulette .levels .level .meta h2 {
+    margin: 0;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+.page-roulette .levels .level .meta p {
+    margin: 0;
+    color: var(--color-on-background);
+    font-size: 0.95rem;
+}
+
+.page-roulette .levels .level .actions {
+    grid-column: 1 / span 2;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    margin: 0;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+.page-roulette .levels .level .actions input[type="number"] {
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    flex: 1;
+    color: white;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: var(--transition);
+}
+.page-roulette .levels .level .actions input[type="number"]::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.page-roulette .levels .level .actions input[type="number"]:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.page-roulette .levels .level .actions input[type="number"]:-webkit-autofill,
+.page-roulette .levels .level .actions input[type="number"]:-webkit-autofill:hover,
+.page-roulette .levels .level .actions input[type="number"]:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px rgba(79, 70, 229, 0.3) inset;
+    -webkit-text-fill-color: white;
+}
+
+.page-roulette .levels .results {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-border);
+}
+.page-roulette .levels .results h1 {
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.page-roulette .levels .results p {
+    color: var(--color-on-background);
+    font-weight: 500;
+}
+.page-roulette .levels .results .btn {
+    margin-top: 1rem;
+    align-self: flex-start;
+}
+.page-roulette .toasts-container {
+    overflow-y: auto;
+    grid-column: 2 / span 2;
+    grid-row: 1;
+    align-self: start;
+    margin-block: 0;
+    margin-right: 0;
+    padding-right: 2rem;
+    padding-block: 2rem;
+}
+.page-roulette .toasts {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+}
+.page-roulette .toast {
+    display: flex;
+    background: linear-gradient(135deg, var(--color-error) 0%, #dc2626 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+    font-weight: 500;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@media screen and (min-width: 1366px) {
+    .page-roulette .levels-container {
+        grid-column: 2;
+        padding-right: 2rem;
+    }
+    .page-roulette .toasts-container {
+        grid-column: 3;
+        margin: 0;
+        padding-right: 2rem;
+        padding-block: 2rem;
+        align-self: stretch;
+    }
+}
