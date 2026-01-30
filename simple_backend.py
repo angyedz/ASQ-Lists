@@ -1,78 +1,71 @@
-import telebot
-import jwt
 import json
-import secrets
+import jwt
 import os
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from datetime import datetime, timedelta
 from shield import PasswordManager
 
-# --- КОНФИГ ---
-TOKEN = '8456640257:AAE_bwy6s3N604rnbpYbFqb153iM9cDE63I'
-MY_ID = 1673415110
-bot = telebot.TeleBot(TOKEN)
-pm = PasswordManager('accounts.txt')
-SECRET_KEY = "hell0h3ndsh3ke@#*(&@$KXSF9)" # Замени на свою строку
-LEADERBOARD = []
+app = Flask(__name__)
+CORS(app)
 
-def verify_token(token):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-        return payload.get('user')
-    except: return None
+# --- НАСТРОЙКИ ---
+SECRET_KEY = "super_secret_key_123"
+ACCOUNTS_FILE = 'accounts.txt'
+LEADER_FILE = 'leaderboard.json'
 
-def process_logic(data):
-    route = data.get('route')
+pm = PasswordManager(ACCOUNTS_FILE)
+
+def load_leaderboard():
+    if os.path.exists(LEADER_FILE):
+        with open(LEADER_FILE, 'r') as f: return json.load(f)
+    return []
+
+def save_leaderboard(data):
+    with open(LEADER_FILE, 'w') as f: json.dump(data, f)
+
+# --- РОУТЫ ---
+
+@app.route('/api/auth', methods=['POST'])
+def auth():
+    data = request.json
+    user, pwd, mode = data.get('user'), data.get('pwd'), data.get('mode')
     
-    # AUTH
-    if route == '/api/auth':
-        user, pwd, mode = data.get('user', ''), data.get('pwd', ''), data.get('mode', '')
-        if mode == 'login':
-            if pm.check_user(user, pwd):
-                token = jwt.encode({'user': user, 'exp': datetime.utcnow() + timedelta(days=7)}, SECRET_KEY, algorithm='HS256')
-                return {'status': 'success', 'user': user, 'token': token}, 200
-            return {'status': 'error', 'message': 'Invalid credentials'}, 401
-        elif mode == 'reg':
-            res = pm.register_user(user, pwd)
-            if res['status'] == 'success':
-                token = jwt.encode({'user': user, 'exp': datetime.utcnow() + timedelta(days=7)}, SECRET_KEY, algorithm='HS256')
-                return {'status': 'success', 'user': user, 'token': token}, 200
-            return res, 400
+    if mode == 'login':
+        if pm.check_user(user, pwd):
+            token = jwt.encode({'user': user, 'exp': datetime.utcnow() + timedelta(days=7)}, SECRET_KEY)
+            return jsonify({'status': 'success', 'token': token, 'user': user})
+        return jsonify({'status': 'error', 'message': 'Неверный логин или пароль'}), 401
+    
+    elif mode == 'reg':
+        res = pm.register_user(user, pwd)
+        return jsonify(res), (200 if res['status'] == 'success' else 400)
 
-    # PROFILE
-    elif route == '/api/profile':
-        user = verify_token(data.get('token', ''))
-        if not user: return {'status': 'error', 'message': 'Unauthorized'}, 401
-        entry = next((u for u in LEADERBOARD if u['user'] == user), None)
-        return {'status': 'success', 'profile': {'user': user, 'rank': LEADERBOARD.index(entry)+1 if entry else 0, 'totalPoints': entry['score'] if entry else 0}}, 200
+@app.route('/api/leaderboard', methods=['GET', 'POST'])
+def leaderboard():
+    scores = load_leaderboard()
+    if request.method == 'POST':
+        data = request.json
+        user, score = data.get('user'), data.get('score', 0)
+        
+        entry = next((item for item in scores if item["user"] == user), None)
+        if entry: entry['score'] = max(entry['score'], score)
+        else: scores.append({"user": user, "score": score})
+        
+        scores.sort(key=lambda x: x['score'], reverse=True)
+        save_leaderboard(scores)
+        return jsonify({"status": "success", "leaderboard": scores})
+    
+    return jsonify({"status": "success", "leaderboard": scores})
 
-    # LEADERBOARD
-    elif route == '/api/leaderboard':
-        if data.get('method') == 'POST':
-            user, score = data.get('user', ''), data.get('score', 0)
-            entry = next((u for u in LEADERBOARD if u['user'] == user), None)
-            if entry: entry['score'] = max(entry['score'], score)
-            else: LEADERBOARD.append({'user': user, 'score': score})
-            LEADERBOARD.sort(key=lambda x: x['score'], reverse=True)
-        return {'status': 'success', 'leaderboard': LEADERBOARD}, 200
-
-    # HEALTH & BATTERY (Твоя задача №4)
-    elif route == '/api/health':
-        try:
-            with open("/sys/class/power_supply/battery/temp", "r") as f:
-                temp = int(f.read()) / 10
-        except: temp = "N/A"
-        return {'status': 'healthy', 'battery_temp': temp, 'timestamp': datetime.now().isoformat()}, 200
-
-    return {'status': 'error', 'message': 'Not Found'}, 404
-
-@bot.message_handler(func=lambda m: m.chat.id == MY_ID)
-def handle(m):
+@app.route('/api/health', methods=['GET'])
+def health():
     try:
-        req = json.loads(m.text)
-        res, code = process_logic(req)
-        bot.reply_to(m, json.dumps({"data": res, "code": code}))
-    except: pass
+        with open("/sys/class/power_supply/battery/temp", "r") as f:
+            temp = int(f.read()) / 10
+    except: temp = "N/A"
+    return jsonify({'status': 'online', 'battery_temp': temp})
 
 if __name__ == '__main__':
-    print("🚀 Backend is running...")
-    bot.infinity_polling()
+    print("🚀 СЕРВЕР ЗАПУЩЕН НА ПОРТУ 8000")
+    app.run(host='0.0.0.0', port=8000)
