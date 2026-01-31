@@ -21,13 +21,20 @@ export async function apiCall(endpoint, options = {}) {
             baseUrl = SITE_URL;
         }
         
+        const headers = {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+        };
+        
+        // Добавляем Authorization только если есть токен и это защищённый эндпоинт
+        const token = getToken();
+        if (token && (endpoint.startsWith('/api/profile') || endpoint.startsWith('/api/leaderboard'))) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        
         const response = await fetch(`${baseUrl}${endpoint}`, {
             method: options.method || 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getToken()}`,
-                'ngrok-skip-browser-warning': 'true'
-            },
+            headers: headers,
             body: options.body
         });
 
