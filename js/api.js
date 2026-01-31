@@ -1,8 +1,8 @@
 // Frontend - GitHub Pages
 export const SITE_URL = 'https://angyedz.github.io/ASQ-Lists';
 
-// Backend для аккаунтов - через туннель localtunnel
-export const AUTH_URL = 'https://asq-lists.loca.lt';
+// Backend для аккаунтов - через туннель ngrok
+export const AUTH_URL = 'https://rohan-untarnishing-beula.ngrok-free.dev';
 
 export const saveToken = (t) => localStorage.setItem('auth_token', t);
 export const getToken = () => localStorage.getItem('auth_token');
