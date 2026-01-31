@@ -1,0 +1,6 @@
+# GitHub Pages configuration
+include:
+  - data
+
+# Build settings
+markdown: kramdown
