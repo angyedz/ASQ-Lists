@@ -1,5 +1,9 @@
-export const API_URL = window.location.origin;
-const WORKER_URL = 'steep-sea-e479.hdigdi89.workers.dev';
+// Frontend - GitHub Pages
+export const SITE_URL = 'https://angyedz.github.io/ASQ-Lists';
+
+// Backend для аккаунтов - через туннель localtunnel
+// Замени это на URL из "lt --port 9000"
+export const AUTH_URL = 'https://wild-weeks-kneel.loca.lt';
 
 export const saveToken = (t) => localStorage.setItem('auth_token', t);
 export const getToken = () => localStorage.getItem('auth_token');
@@ -7,7 +11,17 @@ export const clearToken = () => localStorage.removeItem('auth_token');
 
 export async function apiCall(endpoint, options = {}) {
     try {
-        const response = await fetch(`${WORKER_URL}${endpoint}`, {
+        // Определяем URL в зависимости от эндпоинта
+        let baseUrl;
+        if (endpoint.startsWith('/api/auth') || endpoint.startsWith('/api/leaderboard')) {
+            // Аккаунты и лидерборд через туннель (backend)
+            baseUrl = AUTH_URL;
+        } else {
+            // Остальное с фронтенда (локалхост)
+            baseUrl = SITE_URL;
+        }
+        
+        const response = await fetch(`${baseUrl}${endpoint}`, {
             method: options.method || 'POST',
             headers: {
                 'Content-Type': 'application/json',

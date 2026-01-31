@@ -1,4 +1,4 @@
-import { API_URL, saveToken } from "../api.js";
+import { AUTH_URL, saveToken } from "../api.js";
 
 export default {
     template: `
@@ -161,7 +161,7 @@ export default {
                 }
 
                 // Send request to API
-                const response = await fetch(`${API_URL}/api/auth`, {
+                const response = await fetch(`${AUTH_URL}/api/auth`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',

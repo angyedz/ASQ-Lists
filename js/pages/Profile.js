@@ -1,4 +1,4 @@
-import { API_URL, clearToken } from "../api.js";
+import { SITE_URL, clearToken } from "../api.js";
 
 export default {
     template: `
@@ -84,7 +84,7 @@ export default {
     methods: {
         async fetchProfile() {
             try {
-                const response = await fetch(`${API_URL}/api/profile`);
+                const response = await fetch(`${SITE_URL}/api/profile`);
                 const data = await response.json();
                 
                 if (data.status === 'success') {

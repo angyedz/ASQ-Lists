@@ -1,10 +1,10 @@
 import { round, score } from './score.js';
-import { API_URL, apiCall } from './api.js';
+import { SITE_URL, apiCall } from './api.js';
 
 /**
  * Путь к папке с JSON данными уровней (статике)
  */
-const dir = `${API_URL}/data`;
+const dir = `${SITE_URL}/data`;
 
 export async function fetchList() {
     try {
