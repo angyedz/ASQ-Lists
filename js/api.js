@@ -3,7 +3,7 @@ export const SITE_URL = 'https://angyedz.github.io/ASQ-Lists';
 
 // Backend для аккаунтов - через туннель localtunnel
 // Замени это на URL из "lt --port 9000"
-export const AUTH_URL = 'https://fine-lands-doubt.loca.lt';
+export const AUTH_URL = 'https://purple-trams-tell.loca.lt';
 
 export const saveToken = (t) => localStorage.setItem('auth_token', t);
 export const getToken = () => localStorage.getItem('auth_token');

@@ -3,7 +3,7 @@ import { AUTH_URL, apiCall } from './api.js';
 
 /**
  * Путь к папке с JSON данными уровней (статике)
- * GitHub Pages URL с папкой ASQ-Lists
+ * GitHub Pages URL с полным путём включая /ASQ-Lists/
  */
 const dir = 'https://angyedz.github.io/ASQ-Lists/data';
 
