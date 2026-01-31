@@ -22,7 +22,8 @@ export async function apiCall(endpoint, options = {}) {
         }
         
         const headers = {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'User-Agent': 'ASQ-Lists-Client/1.0'
         };
         
         // Добавляем Authorization только если есть токен и это защищённый эндпоинт
