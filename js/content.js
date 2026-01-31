@@ -3,20 +3,21 @@ import { AUTH_URL, apiCall } from './api.js';
 
 /**
  * Путь к папке с JSON данными уровней (статике)
- * GitHub Pages URL с полным путём включая /ASQ-Lists/
+ * GitHub Pages URL с cache busting параметром
  */
 const dir = 'https://angyedz.github.io/ASQ-Lists/data';
+const cacheBust = `?v=${Date.now()}`;
 
 export async function fetchList() {
     try {
-        const listResult = await fetch(`${dir}/_list.json`);
+        const listResult = await fetch(`${dir}/_list.json${cacheBust}`);
         if (!listResult.ok) throw new Error("Не удалось загрузить _list.json");
         
         const list = await listResult.json();
         return await Promise.all(
             list.map(async (path, rank) => {
                 try {
-                    const levelResult = await fetch(`${dir}/${path}.json`);
+                    const levelResult = await fetch(`${dir}/${path}.json${cacheBust}`);
                     const level = await levelResult.json();
                     return [
                         {
@@ -40,7 +41,7 @@ export async function fetchList() {
 
 export async function fetchEditors() {
     try {
-        const res = await fetch(`${dir}/_editors.json`);
+        const res = await fetch(`${dir}/_editors.json${cacheBust}`);
         return await res.json();
     } catch {
         return null;
