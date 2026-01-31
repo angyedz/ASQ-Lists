@@ -2,7 +2,7 @@
 export const SITE_URL = 'https://angyedz.github.io/ASQ-Lists';
 
 // Backend для аккаунтов - через Cloudflare Tunnel
-export const AUTH_URL = 'https://manager-rehabilitation-citation-call.trycloudflare.com';
+export const AUTH_URL = 'https://examinations-petite-cheats-glow.trycloudflare.com ';
 
 export const saveToken = (t) => localStorage.setItem('auth_token', t);
 export const getToken = () => localStorage.getItem('auth_token');
