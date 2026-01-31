@@ -1,10 +1,11 @@
 import { round, score } from './score.js';
-import { SITE_URL, apiCall } from './api.js';
+import { AUTH_URL, apiCall } from './api.js';
 
 /**
  * Путь к папке с JSON данными уровней (статике)
+ * GitHub Pages URL с папкой ASQ-Lists
  */
-const dir = `${SITE_URL}/data`;
+const dir = 'https://angyedz.github.io/ASQ-Lists/data';
 
 export async function fetchList() {
     try {
