@@ -1,12 +1,8 @@
 // Frontend - GitHub Pages
 export const SITE_URL = 'https://angyedz.github.io/ASQ-Lists';
 
-// Backend для аккаунтов - через CORS прокси (избегает проблем с туннелями)
-// CORS прокси работает на http://localhost:8001 и переадресовывает на http://localhost:9000
-// Для интернета используй любой туннель:
-// export const AUTH_URL = 'https://asq-lists.loca.lt';  // localtunnel
-// export const AUTH_URL = 'https://your-url.ngrok-free.dev';  // ngrok
-export const AUTH_URL = 'http://localhost:8001';
+// Backend для аккаунтов - через Cloudflare Tunnel
+export const AUTH_URL = 'https://ruling-immunology-cycle-hours.trycloudflare.com';
 
 export const saveToken = (t) => localStorage.setItem('auth_token', t);
 export const getToken = () => localStorage.getItem('auth_token');
