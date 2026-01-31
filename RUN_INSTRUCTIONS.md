@@ -3,51 +3,105 @@
 ## Требования
 
 1. Python 3.x
-2. Node.js (для ngrok и localtunnel)
+2. Node.js (для туннелей)
 
-## Три шага для запуска
+## Архитектура
 
-### 1️⃣ **Запустить Backend сервер**
+```
+Frontend (GitHub Pages)  →  Backend API (туннель)
+https://angyedz.github.io/ASQ-Lists/  →  https://ngrok-url/api/*
+```
+
+## Шаг 1: Запустить Backend сервер
 
 ```powershell
 python backend_server.py
 ```
 
-Слушает на: `http://localhost:9000`
+✅ Слушает на: `http://localhost:9000`
 
-### 2️⃣ **Запустить туннель (выбери один из вариантов)**
+Проверка:
+```powershell
+Invoke-WebRequest -Uri "http://localhost:9000/api/leaderboard" -Headers @{"Content-Type"="application/json"} -Method GET
+```
 
-#### Вариант A: ngrok (рекомендуется)
+Должен вернуть: `{"status": "success", "leaderboard": []}`
+
+## Шаг 2: Запустить туннель
+
+### Рекомендуемый вариант: ngrok
+
 ```powershell
 ngrok http 9000
 ```
 
-Скопируй URL из вывода (например: `https://xyz.ngrok-free.dev`)
+**ВАЖНО: Первый раз**
+1. Скопируй URL из вывода (например: `https://abc123.ngrok-free.dev`)
+2. Открой URL **в браузере один раз** - это одобрит туннель для API запросов
+3. После этого CTRL+C в командной строке ngrok и запусти заново:
+   ```powershell
+   ngrok http 9000
+   ```
 
-Затем обнови `js/api.js`:
-```javascript
-export const AUTH_URL = 'https://xyz.ngrok-free.dev';
-```
+### Альтернатива: localtunnel
 
-**ВАЖНО:** Первый раз откройнj ngrok URL в браузере для одобрения!
-
-#### Вариант B: localtunnel
 ```powershell
 lt --port 9000 --subdomain asq-lists
 ```
 
 URL: `https://asq-lists.loca.lt`
 
-Обнови `js/api.js`:
+## Шаг 3: Обновить API URL
+
+Отредактируй файл `js/api.js` (строка 6) и установи туннель URL:
+
 ```javascript
-export const AUTH_URL = 'https://asq-lists.loca.lt';
+export const AUTH_URL = 'https://abc123.ngrok-free.dev';
+// или для localtunnel:
+// export const AUTH_URL = 'https://asq-lists.loca.lt';
 ```
 
-### 3️⃣ **Обновить API URL в коде**
+Потом коммитни и пушни в GitHub:
+```powershell
+git add js/api.js
+git commit -m "Update API URL to new tunnel"
+git push
+```
 
-После получения туннель URL, обнови файл `js/api.js` (строка 6):
+## Шаг 4: Проверить что работает
 
-```javascript
+1. Откройи: https://angyedz.github.io/ASQ-Lists/
+2. Нажми F12 чтобы открыть консоль разработчика
+3. Перейди на Leaderboard или Auth страницу
+4. В консоли НЕ должно быть красных ошибок
+5. Если есть "HTML" ошибки - значит туннель требует одобрения
+
+## Тестовые аккаунты
+
+- Пользователь: `kazah`
+- Пароль: `88888888`
+
+или создай новый аккаунт через Register
+
+## Устранение проблем
+
+### "<!DOCTYPE" ошибка в консоли
+→ Открой tuннель URL в браузере один раз для одобрения
+
+### "CORS" ошибки
+→ Убедись что туннель URL правильный в `js/api.js`
+
+### Backend не отвечает
+→ Проверь `python backend_server.py` запущен на port 9000
+
+## Для продакшена
+
+Когда будешь готов развернуть на production без локального тестирования:
+
+1. **Hostinger/другой хостинг**: Deploy backend_server.py на хостинг с Python поддержкой
+2. **Cloudflare Pages**: Deploy frontend через GitHub Pages (уже настроено)
+3. **API URL**: Обновить на production URL
+
 export const AUTH_URL = 'ТВ​ОЙ_ТУННЕЛЬ_URL';
 ```
 
