@@ -2,8 +2,7 @@
 export const SITE_URL = 'https://angyedz.github.io/ASQ-Lists';
 
 // Backend для аккаунтов - через туннель localtunnel
-// Замени это на URL из "lt --port 9000"
-export const AUTH_URL = 'https://rohan-untarnishing-beula.ngrok-free.dev';
+export const AUTH_URL = 'https://asq-lists.loca.lt';
 
 export const saveToken = (t) => localStorage.setItem('auth_token', t);
 export const getToken = () => localStorage.getItem('auth_token');
@@ -22,9 +21,7 @@ export async function apiCall(endpoint, options = {}) {
         }
         
         const headers = {
-            'Content-Type': 'application/json',
-            'X-User-Agent': 'ASQ-Lists-Client/1.0',
-            'Referer': 'https://angyedz.github.io/'
+            'Content-Type': 'application/json'
         };
         
         // Добавляем Authorization только если есть токен и это защищённый эндпоинт
