@@ -23,7 +23,8 @@ export async function apiCall(endpoint, options = {}) {
         
         const headers = {
             'Content-Type': 'application/json',
-            'User-Agent': 'ASQ-Lists-Client/1.0'
+            'X-User-Agent': 'ASQ-Lists-Client/1.0',
+            'Referer': 'https://angyedz.github.io/'
         };
         
         // Добавляем Authorization только если есть токен и это защищённый эндпоинт
