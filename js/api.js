@@ -25,7 +25,8 @@ export async function apiCall(endpoint, options = {}) {
             method: options.method || 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getToken()}`
+                'Authorization': `Bearer ${getToken()}`,
+                'ngrok-skip-browser-warning': 'true'
             },
             body: options.body
         });
