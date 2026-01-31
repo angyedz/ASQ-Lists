@@ -22,8 +22,7 @@ export async function apiCall(endpoint, options = {}) {
         }
         
         const headers = {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': 'true'
+            'Content-Type': 'application/json'
         };
         
         // Добавляем Authorization только если есть токен и это защищённый эндпоинт
@@ -35,7 +34,8 @@ export async function apiCall(endpoint, options = {}) {
         const response = await fetch(`${baseUrl}${endpoint}`, {
             method: options.method || 'POST',
             headers: headers,
-            body: options.body
+            body: options.body,
+            credentials: 'omit'  // НЕ отправляем cookies/credentials
         });
 
         const result = await response.json();

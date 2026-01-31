@@ -73,7 +73,9 @@ class AuthHandler(http.server.SimpleHTTPRequestHandler):
     def do_OPTIONS(self):
         """Handle CORS preflight"""
         self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
+        # Получаем origin из request headers
+        origin = self.headers.get('Origin', '*')
+        self.send_header('Access-Control-Allow-Origin', origin)
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
         self.end_headers()
@@ -216,7 +218,9 @@ class AuthHandler(http.server.SimpleHTTPRequestHandler):
         """Send JSON response"""
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
+        # Получаем origin из request headers
+        origin = self.headers.get('Origin', '*')
+        self.send_header('Access-Control-Allow-Origin', origin)
         self.end_headers()
         
         response = json.dumps(data, ensure_ascii=False)
